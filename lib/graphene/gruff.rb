@@ -9,5 +9,5 @@ begin
   end
 rescue LoadError => e
   $stderr.puts "ERROR You must install \"gruff\" to use the gruff graphing helpers!"
-  raise e.class.name, e.message
+  raise e.class, e.message
 end

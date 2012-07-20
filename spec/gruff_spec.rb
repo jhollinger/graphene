@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 begin
   require 'graphene/gruff'
-rescue LoadErroe
+rescue LoadError
 end
 require 'digest/md5'
 
