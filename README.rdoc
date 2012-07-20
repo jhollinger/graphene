@@ -21,8 +21,6 @@ Or add "graphene" to your Gemfile
 
 Read the full documentation at http://jordanhollinger.com/docs/graphene/
 
-= Calculations
-
 == Subtotals
 
     # An array of objects with responds to methods like :browser, :platform, :date
@@ -64,8 +62,6 @@ See Graphene::Subtotals for more info.
     percentages = Graphene.percentages(logs, :browser, ->(l) { l.platform })
 
 See Graphene::Percentages for more info.
-
-= Formatting
 
 == Tablizer
 
