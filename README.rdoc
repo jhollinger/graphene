@@ -15,8 +15,8 @@ Or add "graphene" to your Gemfile
     # Redundant if using Bundler
     require 'graphene'
 
-    # Since Gruff's dependencies can a challenge to install, Graphene's Gruff module is not loaded by default.
-    # If you have Gruff installed, you may manually load graphene/gruff
+    # Since Gruff's dependencies can a challenge to install, Graphene's Gruff module is not
+    # loaded by default. If you have Gruff installed, you may manually load graphene/gruff
     require 'graphene/gruff'
 
 Read the full documentation at http://jordanhollinger.com/docs/graphene/
@@ -41,7 +41,7 @@ Read the full documentation at http://jordanhollinger.com/docs/graphene/
     puts subtotals.to_a
     => [["Chrome", "OS X", 102], ["Internet Explorer", 98], ["Firefox", "Windows", 90], ["Firefox", "GNU/Linux", 30], ["Chrome", "GNU/Linux", 10]]
 
-See Graphene::Subtotals for more info.
+See Graphene.subtotals for more info.
 
 == Percentages
 
@@ -61,17 +61,21 @@ See Graphene::Subtotals for more info.
     # You can also calculate by multiple criteria, and can use lambdas instead of symbols
     percentages = Graphene.percentages(logs, :browser, ->(l) { l.platform })
 
-See Graphene::Percentages for more info.
+See Graphene.percentages for more info.
 
 == Tablizer
 
-    puts Tablizer::Table.new(percentages.to_a)
-    => +-----------------+------------+----+---+
-       |Firefox          |Windows     |50.0|500|
-       |Internet Explorer|Windows     |20.0|200|
-       |Safari           |OS X        |20.0|200|
-       |Firefox          |GNU/Linux   |10.0|100|
-       +-----------------+------------+----+---+
+Integration with the tablizer gem provices quick ASCII tables.
+
+    puts percentages.tablize
+    => +-----------------+------------+-------+-----+
+       |     Browser     |  Platform  |Percent|Count|
+       +-----------------+------------+-------+-----+
+       |Firefox          |Windows     |50.0   |500  |
+       |Internet Explorer|Windows     |20.0   |200  |
+       |Safari           |OS X        |20.0   |200  |
+       |Firefox          |GNU/Linux   |10.0   |100  |
+       +-----------------+------------+-------+-----+
 
 == Gruff graphs
 

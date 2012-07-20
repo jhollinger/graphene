@@ -1,7 +1,7 @@
 require 'graphene/subtotals'
 
 module Graphene
-  # Calculates and contains the percent subtotals of each attr (or attr group).
+  # Calculates and contains the percent subtotals of each attr (or attr group). Inherits from Graphene::ResultSet.
   # 
   # If you passed an options Hash containing :threshold to the constructor, 
   # any results falling below it will be excluded.

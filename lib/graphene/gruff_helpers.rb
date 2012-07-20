@@ -64,7 +64,7 @@ module Graphene
     # Returns a Gruff::Line object with the stats set.
     # 
     # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
-    #  value for the x axis.
+    # value for the x axis.
     #
     # Optionally you may pass a file path and graph title. If you pass a file path, the graph will
     # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
