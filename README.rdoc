@@ -1,0 +1,115 @@
+= Graphene
+
+Description
+
+*NOTE* Ruby 1.8?
+
+== Installation
+
+    gem install graphene
+
+Or add "graphene" to your Gemfile
+
+== Loading
+
+    # Redundant if using Bundler
+    require 'graphene'
+
+    # Since Gruff's dependencies can a challenge to install, Graphene's Gruff module is not loaded by default.
+    # If you have Gruff installed, you may manually load graphene/gruff
+    require 'graphene/gruff'
+
+Read the full documentation at http://jordanhollinger.com/docs/graphene/
+
+= Calculations
+
+== Subtotals
+
+    # An array of objects with responds to methods like :browser, :platform, :date
+    logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
+
+    subtotals = Graphene.subtotals(logs, :browser)
+
+    puts subtotals.to_a
+    => [["Firefox", 120], ["Chrome", 112], ["Internet Explorer", 98]]
+
+    subtotals.each do |browser, count|
+      puts "There were #{count} hits from #{browser}"
+    end
+
+    # You can also calculate by multiple criteria, and can use lambdas instead of symbols
+    subtotals = Graphene.subtotals(logs, ->(l) { l.browser }, :platform)
+
+    puts subtotals.to_a
+    => [["Chrome", "OS X", 102], ["Internet Explorer", 98], ["Firefox", "Windows", 90], ["Firefox", "GNU/Linux", 30], ["Chrome", "GNU/Linux", 10]]
+
+See Graphene::Subtotals for more info.
+
+== Percentages
+
+    # An array of objects with responds to methods like :browser, :platform, :date
+    logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
+
+    percentages = Graphene.percentages(logs, :browser)
+
+    # Includes both the percent and the subtotal
+    puts percentages.to_a
+    => [["Firefox", 36.36, 120], ["Chrome", 33.93, 112], ["Internet Explorer", 29.69, 98]]
+
+    percentages.each do |browser, percentage, count|
+      puts "#{percentage}% of hits where from #{browser}"
+    end
+
+    # You can also calculate by multiple criteria, and can use lambdas instead of symbols
+    percentages = Graphene.percentages(logs, :browser, ->(l) { l.platform })
+
+See Graphene::Percentages for more info.
+
+= Formatting
+
+== Tablizer
+
+    puts Tablizer::Table.new(percentages.to_a)
+    => +-----------------+------------+----+---+
+       |Firefox          |Windows     |50.0|500|
+       |Internet Explorer|Windows     |20.0|200|
+       |Safari           |OS X        |20.0|200|
+       |Firefox          |GNU/Linux   |10.0|100|
+       +-----------------+------------+----+---+
+
+== Gruff graphs
+
+Extends Graphene by adding several helpers for generating graphs. Requires that the Ruby "gruff" gem be installed.
+
+    require 'graphene/gruff'
+
+    # An array of objects with responds to methods like :browser, :platform, :date
+    logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
+
+    # A pie chart of Firefox version shares
+    ff = logs.select { |e| e.browser_sym == :firefox }
+    Graphene.percentages(ff, :browser).pie_chart('/path/to/ff-version-share.png', 'Firefox Version Share')
+
+    # A line graph of daily browser family numbers over time, tricked out with lots of options
+    # See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options
+    Graphene.subtotals(logs, :browser_family).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+      chart.title = 'Browser Share'
+      chart.font = '/path/to/awesome/font.ttf'
+      chart.theme = {
+        :colors => %w(orange purple green white red),
+        :marker_color => 'blue',
+        :background_colors => %w(black grey)
+      }
+
+      # Only show every 7th label, and make dates pretty
+      labeler.call(7) do |date|
+        date.strftime('%b %e')
+      end
+    end
+
+Look at Graphene::GruffHelpers for more graphs and examples.
+
+== License
+Copyright 2012 Jordan Hollinger
+
+Licensed under the Apache License
