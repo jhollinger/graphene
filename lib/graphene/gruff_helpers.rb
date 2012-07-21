@@ -36,7 +36,7 @@ module Graphene
     # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
     # returned chart object.
     #
-    # If you pass a block, it will be called, giving you access to the Gruff::Pie object before it is
+    # If you pass a block, it will be called, giving you access to the Gruff::Bar object before it is
     # written to file (that is, if you also passed a file path).
     # 
     # Example 1:
@@ -56,7 +56,94 @@ module Graphene
     #  blog = Graphene.subtotals(logs, :browser).bar_chart.to_blob
     #
     def bar_chart(path=nil, title=nil, &block)
-      chart(Gruff::Bar.new, path, title, &block)
+      chart(Gruff::Bar.new, path, title, false, &block)
+    end
+
+    # Returns a Gruff::StackedBar object with the stats set.
+    #
+    # Optionally you may pass a file path and chart title. If you pass a file path, the chart will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned chart object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::StackedBar object before it is
+    # written to file (that is, if you also passed a file path).
+    # 
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).stacked_bar_chart('/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.percentages(logs, :browser).stacked_bar_chart('/path/to/browser-share.png') do |chart|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = chart.theme_37signals
+    #  end
+    # 
+    # Example 3:
+    # 
+    #  blog = Graphene.subtotals(logs, :browser).stacked_bar_chart.to_blob
+    #
+    def stacked_bar_chart(path=nil, title=nil, &block)
+      chart(Gruff::StackedBar.new, path, title, true, &block)
+    end
+
+    # Returns a Gruff::SideBar object with the stats set.
+    #
+    # Optionally you may pass a file path and chart title. If you pass a file path, the chart will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned chart object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::SideBar object before it is
+    # written to file (that is, if you also passed a file path).
+    # 
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).side_bar_chart('/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.percentages(logs, :browser).side_bar_chart('/path/to/browser-share.png') do |chart|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = chart.theme_37signals
+    #  end
+    # 
+    # Example 3:
+    # 
+    #  blog = Graphene.subtotals(logs, :browser).side_bar_chart.to_blob
+    #
+    def side_bar_chart(path=nil, title=nil, &block)
+      chart(Gruff::SideBar.new, path, title, true, &block)
+    end
+
+    # Returns a Gruff::StackedSideBar object with the stats set.
+    #
+    # Optionally you may pass a file path and chart title. If you pass a file path, the chart will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned chart object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::StackedSideBar object before it is
+    # written to file (that is, if you also passed a file path).
+    # 
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).side_stacked_bar_chart('/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.percentages(logs, :browser).side_stacked_bar_chart('/path/to/browser-share.png') do |chart|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = chart.theme_37signals
+    #  end
+    # 
+    # Example 3:
+    # 
+    #  blog = Graphene.subtotals(logs, :browser).side_stacked_bar_chart.to_blob
+    #
+    def side_stacked_bar_chart(path=nil, title=nil, &block)
+      chart(Gruff::SideStackedBar.new, path, title, true, &block)
     end
 
     # Returns a Gruff::Line object with the stats set.  # 
@@ -141,7 +228,7 @@ module Graphene
     private
 
     # Builds a chart
-    def chart(chart, path=nil, title=nil, &block)
+    def chart(chart, path=nil, title=nil, hack=false, &block)
       chart.title = title unless title.nil?
       block.call(chart) if block
 
@@ -150,6 +237,8 @@ module Graphene
         n = result[attributes.size]
         chart.data name, n
       end
+      # XXX Required by SideBar and SideStackedBar. Probably a bug.
+      chart.labels = {0 => ' '} if hack
 
       chart.write(path) unless path.nil?
       chart

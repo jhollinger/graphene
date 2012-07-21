@@ -68,6 +68,21 @@ if defined? Gruff
       Graphene.percentages(HITS, :browser).bar_chart(@file_path, 'Browser % Shares')
       @md5[@file_path].should == '5dbee13f6b214043724e729de79de00f'
     end
+
+    it 'should write a stacked bar graph using percents' do
+      Graphene.percentages(HITS, :browser).stacked_bar_chart(@file_path, 'Browser % Shares')
+      @md5[@file_path].should == 'eae4eb2a780a0156a986099dbccf632c'
+    end
+
+    it 'should write a side bar graph using subtotals' do
+      Graphene.subtotals(HITS, :browser).side_bar_chart(@file_path, 'Browser Shares')
+      @md5[@file_path].should == '0f06544c311cba1be66f705f052b8374'
+    end
+
+    it 'should write a stacked side bar graph using subtotals' do
+      Graphene.subtotals(HITS, :browser).side_stacked_bar_chart(@file_path, 'Browser Shares')
+      @md5[@file_path].should == 'dcdc1d1c7938f0d6c4c93a70a9677f59'
+    end
   end
 else
   $stderr.puts "Graphing cannot be tested because Gruff could not be loaded"
