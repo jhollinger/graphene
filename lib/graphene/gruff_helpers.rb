@@ -61,8 +61,7 @@ module Graphene
       chart(Gruff::Bar.new, path, title, &block)
     end
 
-    # Returns a Gruff::Line object with the stats set.
-    # 
+    # Returns a Gruff::Line object with the stats set.  # 
     # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
     # value for the x axis.
     #

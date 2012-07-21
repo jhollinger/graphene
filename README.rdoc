@@ -2,24 +2,25 @@
 
 Graphene is a library for calculating subtotals, percentages, tables and graphs from collections of Ruby objects.
 
+Read the full documentation at http://jordanhollinger.com/docs/graphene/
+
 Ruby 1.8 is not supported. Stop using it.
 
 == Installation
 
-    gem install graphene
+    $ [sudo] gem install graphene
+    # Or just add "graphene" to your Gemfile
 
-Or add "graphene" to your Gemfile
+Gruff is required only by Graphene's graphing component. Because of this, and because Gruff's dependencies can be difficult to install, 
+you will need to install Gruff manually. If you do not/cannot, Graphene's other components will continue to function.
 
-== Loading
+    # On Debian/Ubuntu
+    $ sudo apt-get install librmagick-ruby libmagickcore-dev libmagickwand-dev 
 
-    # Redundant if using Bundler
-    require 'graphene'
+    $ [sudo] gem install rmagick gruff
+    # Or just add "rmagick" and "gruff" to your Gemfile
 
-    # Since Gruff's dependencies can a challenge to install, Graphene's Gruff module is not
-    # loaded by default. If you have Gruff installed, you may manually load graphene/gruff
-    require 'graphene/gruff'
-
-Read the full documentation at http://jordanhollinger.com/docs/graphene/
+See http://nubyonrails.com/pages/gruff/ for more on Gruff.
 
 == Subtotals
 
@@ -65,7 +66,7 @@ See Graphene.percentages for more info.
 
 == Tablizer
 
-Integration with the tablizer gem provices quick ASCII tables.
+Integration with the tablizer gem provides quick ASCII tables.
 
     puts percentages.tablize
     => +-----------------+------------+-------+-----+
@@ -77,13 +78,11 @@ Integration with the tablizer gem provices quick ASCII tables.
        |Firefox          |GNU/Linux   |10.0   |100  |
        +-----------------+------------+-------+-----+
 
-== Gruff graphs
+== Graphs
 
 Extends Graphene by adding several helpers for generating graphs. Requires that the Ruby "gruff" gem be installed.
 
-    require 'graphene/gruff'
-
-    # An array of objects with responds to methods like :browser, :platform, :date
+    # An array of objects which respond to methods like :browser, :platform, :date
     logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
 
     # A pie chart of Firefox version shares

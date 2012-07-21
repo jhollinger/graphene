@@ -1,8 +1,4 @@
 require File.dirname(__FILE__) + '/spec_helper'
-begin
-  require 'graphene/gruff'
-rescue LoadError
-end
 require 'digest/md5'
 
 if defined? Gruff
@@ -73,4 +69,6 @@ if defined? Gruff
       @md5[@file_path].should == '5dbee13f6b214043724e729de79de00f'
     end
   end
+else
+  $stderr.puts "Graphing cannot be tested because Gruff could not be loaded"
 end
