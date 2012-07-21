@@ -181,7 +181,8 @@ module Graphene
     end
     alias_method :spider_graph, :spider_chart
 
-    # Returns a Gruff::Line object with the stats set.  # 
+    # Returns a Gruff::Line object with the stats set.
+    #
     # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
     # value for the x axis.
     #
@@ -222,9 +223,80 @@ module Graphene
     #
     #  Graphene.percentages(logs, :platform, :browser).line_graph(->(l) { l.date.strftime('%m/%Y') }, '/path/to/os-browser-share.png', 'OS / Browser Share by Month')
     #
-    def line_graph(x_method, path=nil, title=nil)
-      chart = Gruff::Line.new
+    def line_graph(x_method, path=nil, title=nil, &block)
+      graph(Gruff::Line.new, x_method, path, title, &block)
+    end
+    alias_method :line_chart, :line_graph
+
+    # Returns a Gruff::Net object with the stats set.
+    #
+    # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
+    # value for the x axis.
+    #
+    # Optionally you may pass a file path and graph title. If you pass a file path, the graph will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned graph object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::Net object before it is
+    # written to file (that is, if you also passed a file path). It will also give you access to a Proc
+    # for labeling the X axis.
+    #
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).net_graph(:date, '/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.subtotals(logs, :browser).net_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = pie.theme_37signals
+    #  end
+    #
+    # Example 3:
+    #
+    #  Graphene.subtotals(logs, :browser).net_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    #    chart.title = 'Browser Share'
+    #
+    #    # Both the 10 and the block are optional.
+    #    #  - "10" means that only every 10'th label will be printed. Otherwise, each would be.
+    #    #  - The block is passed each label (the return value of "x_method") and may return a formatted version.
+    #    labeler.call(10) do |date|
+    #      date.strftime('%m/%d/%Y')
+    #    end
+    #  end
+    #
+    # Example 4:
+    #
+    #  Graphene.percentages(logs, :platform, :browser).net_graph(->(l) { l.date.strftime('%m/%Y') }, '/path/to/os-browser-share.png', 'OS / Browser Share by Month')
+    #
+    def net_graph(point_method, path=nil, title=nil, &block)
+      graph(Gruff::Net.new, point_method, path, title, &block)
+    end
+    alias_method :net_chart, :net_graph
+
+    private
+
+    # Builds a chart
+    def chart(chart, path=nil, title=nil, hack=false, &block)
       chart.title = title unless title.nil?
+      block.call(chart) if block
+
+      each do |result|
+        name = result[0..attributes.size-1].join(' / ')
+        n = result[attributes.size]
+        chart.data name, n
+      end
+      # XXX Required by SideBar and SideStackedBar. Probably a bug.
+      chart.labels = {0 => ' '} if hack
+
+      chart.write(path) unless path.nil?
+      chart
+    end
+
+    # Builds a graph
+    def graph(graph, x_method, path=nil, title=nil, &block)
+      graph.title = title unless title.nil?
 
       # Create an empty array for each group (e.g. {"Firefox" => [], "Safari" => []})
       data = resources.map { |r| attributes.map { |attr| attr.respond_to?(:call) ? attr.call(r) : r.send(attr) } }.uniq.inject({}) do |dat, attrs|
@@ -248,36 +320,16 @@ module Graphene
         label_every_n = n
         labeler = block if block
       end
-      yield(chart, get_labeler) if block_given?
-      # Build labels and add them to chart
+      yield(graph, get_labeler) if block_given?
+      # Build labels and add them to graph
       labels = resources_by_x.keys
-      chart.labels = Hash[*labels.select { |x| labels.index(x) % label_every_n == 0 }.map { |x| [*labels.index(x), labeler[x]] }.flatten]
+      graph.labels = Hash[*labels.select { |x| labels.index(x) % label_every_n == 0 }.map { |x| [*labels.index(x), labeler[x]] }.flatten]
 
-      # Add data to the chart
-      data.each { |attrs, dat| chart.data attrs.join(' / '), dat }
+      # Add data to the graph
+      data.each { |attrs, dat| graph.data attrs.join(' / '), dat }
 
-      chart.write(path) unless path.nil?
-      chart
-    end
-    alias_method :line_chart, :line_graph
-
-    private
-
-    # Builds a chart
-    def chart(chart, path=nil, title=nil, hack=false, &block)
-      chart.title = title unless title.nil?
-      block.call(chart) if block
-
-      each do |result|
-        name = result[0..attributes.size-1].join(' / ')
-        n = result[attributes.size]
-        chart.data name, n
-      end
-      # XXX Required by SideBar and SideStackedBar. Probably a bug.
-      chart.labels = {0 => ' '} if hack
-
-      chart.write(path) unless path.nil?
-      chart
+      graph.write(path) unless path.nil?
+      graph
     end
   end
 end

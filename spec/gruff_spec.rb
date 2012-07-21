@@ -52,6 +52,11 @@ if defined? Gruff
       @md5[@file_path].should == '263562b4e4eacbe283958116c7072c0d'
     end
 
+    it 'should write a net graph using percentages' do
+      Graphene.percentages(HITS, :browser).net_graph(:date, @file_path, 'Browser Shares')
+      @md5[@file_path].should == '13a1cef22766fce38b7b0d445f0dc8cb`'
+    end
+
     it 'should write a simple bar graph' do
       Graphene.subtotals(HITS, :browser).bar_chart(@file_path, 'Browser Numbers')
       @md5[@file_path].should == '9e7c663c9f4f19030508d415bc9a1b04'
@@ -86,11 +91,6 @@ if defined? Gruff
 
     it 'should write a spider chart using subtotals' do
       Graphene.subtotals(HITS, :browser).spider_chart(@file_path, 'Browser Shares')
-      @md5[@file_path].should == '9aaa22a4ac06b0932343aaf9151c75c2'
-    end
-
-    it 'should write a spider chart using percentages' do
-      Graphene.percentages(HITS, :browser).spider_chart(@file_path, 'Browser Shares')
       @md5[@file_path].should == '9aaa22a4ac06b0932343aaf9151c75c2'
     end
   end
