@@ -1,8 +1,7 @@
 = Graphene
 
 Graphene is a library for calculating subtotals, percentages, tables and graphs from collections of Ruby objects.
-
-Read the full documentation at http://jordanhollinger.com/docs/graphene/
+Read the full documentation at http://jordanhollinger.com/docs/graphene/.
 
 Ruby 1.8 is not supported. Stop using it.
 

@@ -12,7 +12,6 @@ module Graphene
     # 
     # Example 1:
     # 
-    #  logs = SomeLogParser.parse("/var/log/nginx/my-site.access.log*")
     #  Graphene.percentages(logs, :browser).pie_chart('/path/to/browser-share.png', 'Browser Share')
     #
     # Example 2:
@@ -42,7 +41,6 @@ module Graphene
     # 
     # Example 1:
     # 
-    #  logs = SomeLogParser.parse("/var/log/nginx/my-site.access.log*")
     #  Graphene.percentages(logs, :browser).bar_chart('/path/to/browser-share.png', 'Browser Share')
     #
     # Example 2:
@@ -55,7 +53,7 @@ module Graphene
     # 
     # Example 3:
     # 
-    #  blog = Graphene.counts(logs, :browser).bar_chart.to_blob
+    #  blog = Graphene.subtotals(logs, :browser).bar_chart.to_blob
     #
     def bar_chart(path=nil, title=nil, &block)
       chart(Gruff::Bar.new, path, title, &block)
@@ -75,12 +73,11 @@ module Graphene
     #
     # Example 1:
     # 
-    #  logs = SomeLogParser.parse("/var/log/nginx/my-site.access.log*")
     #  Graphene.percentages(logs, :browser).line_graph(:date, '/path/to/browser-share.png', 'Browser Share')
     #
     # Example 2:
     #
-    #  Graphene.counts(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    #  Graphene.subtotals(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
     #    chart.title = 'Browser Share'
     #    chart.font = '/path/to/font.ttf'
     #    chart.theme = pie.theme_37signals
@@ -88,7 +85,7 @@ module Graphene
     #
     # Example 3:
     #
-    #  Graphene.counts(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    #  Graphene.subtotals(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
     #    chart.title = 'Browser Share'
     #
     #    # Both the 10 and the block are optional.

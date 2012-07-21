@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe Graphene do
-  it 'should calculate counts' do
+  it 'should calculate subtotals' do
     stats = Graphene.subtotals(HITS, :browser)
     answer = [["Internet Explorer", 20],
               ["Android", 19],
