@@ -1,9 +1,13 @@
 = Graphene
 
 Graphene is a library for calculating subtotals, percentages, tables and graphs from collections of Ruby objects.
+It's most useful feature is probably the Gruff helpers. True, some types of Gruff charts are pretty simple to begin 
+with, but others can require tedious boilerplate code to calculate percentages, well-spaced labels, and more.
+Graphene hides all of that, accepting an array of objects and transforming them into a graph.
+
 Read the full documentation at http://jordanhollinger.com/docs/graphene/.
 
-Ruby 1.8 is not supported. Stop using it.
+Nobody likes you, Ruby 1.8. Now go away.
 
 == Installation
 
