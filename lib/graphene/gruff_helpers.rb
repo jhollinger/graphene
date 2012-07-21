@@ -29,6 +29,7 @@ module Graphene
     def pie_chart(path=nil, title=nil, &block)
       chart(Gruff::Pie.new, path, title, &block)
     end
+    alias_method :pie_graph, :pie_chart
 
     # Returns a Gruff::Bar object with the stats set.
     #
@@ -58,6 +59,7 @@ module Graphene
     def bar_chart(path=nil, title=nil, &block)
       chart(Gruff::Bar.new, path, title, false, &block)
     end
+    alias_method :bar_graph, :bar_chart
 
     # Returns a Gruff::StackedBar object with the stats set.
     #
@@ -87,6 +89,7 @@ module Graphene
     def stacked_bar_chart(path=nil, title=nil, &block)
       chart(Gruff::StackedBar.new, path, title, true, &block)
     end
+    alias_method :stacked_bar_graph, :stacked_bar_chart
 
     # Returns a Gruff::SideBar object with the stats set.
     #
@@ -116,6 +119,7 @@ module Graphene
     def side_bar_chart(path=nil, title=nil, &block)
       chart(Gruff::SideBar.new, path, title, true, &block)
     end
+    alias_method :side_bar_graph, :side_bar_chart
 
     # Returns a Gruff::StackedSideBar object with the stats set.
     #
@@ -145,6 +149,7 @@ module Graphene
     def side_stacked_bar_chart(path=nil, title=nil, &block)
       chart(Gruff::SideStackedBar.new, path, title, true, &block)
     end
+    alias_method :side_stacked_bar_graph, :side_stacked_bar_chart
 
     # Returns a Gruff::Line object with the stats set.  # 
     # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
@@ -224,6 +229,7 @@ module Graphene
       chart.write(path) unless path.nil?
       chart
     end
+    alias_method :line_chart, :line_graph
 
     private
 
