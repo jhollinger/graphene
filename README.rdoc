@@ -23,7 +23,7 @@ See http://nubyonrails.com/pages/gruff/ for more on Gruff.
 
 == Subtotals
 
-    # An array of objects with responds to methods like :browser, :platform, :date
+    # An array of objects which respond to methods like :browser, :platform, :date
     logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
 
     subtotals = Graphene.subtotals(logs, :browser)
@@ -45,7 +45,7 @@ See Graphene.subtotals for more info.
 
 == Percentages
 
-    # An array of objects with responds to methods like :browser, :platform, :date
+    # An array of objects which respond to methods like :browser, :platform, :date
     logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
 
     percentages = Graphene.percentages(logs, :browser)
@@ -85,12 +85,11 @@ Extends Graphene by adding several helpers for generating graphs. Requires that 
     logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
 
     # A pie chart of Firefox version shares
-    ff = logs.select { |e| e.browser_sym == :firefox }
+    ff = logs.select { |e| e.browser == 'Firefox' }
     Graphene.percentages(ff, :browser).pie_chart('/path/to/ff-version-share.png', 'Firefox Version Share')
 
-    # A line graph of daily browser family numbers over time, tricked out with lots of options
-    # See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options
-    Graphene.subtotals(logs, :browser_family).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    # A line graph of daily browser numbers over time, tricked out with lots of options
+    Graphene.subtotals(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
       chart.theme = {
@@ -105,7 +104,7 @@ Extends Graphene by adding several helpers for generating graphs. Requires that 
       end
     end
 
-Look at Graphene::GruffHelpers for more graphs and examples.
+See Graphene::GruffHelpers for more graphs and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
 
 == License
 Copyright 2012 Jordan Hollinger

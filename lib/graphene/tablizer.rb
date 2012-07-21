@@ -29,7 +29,7 @@ module Graphene
 
     # The headers for tablizer
     def tablizer_headers
-      super << 'Subtotal'
+      super << 'Count'
     end
   end
 
@@ -38,7 +38,7 @@ module Graphene
 
     # The headers for tablizer
     def tablizer_headers
-      super.insert(-2, 'Percentage')
+      super.insert(-2, 'Percent')
     end
   end
 end
