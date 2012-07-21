@@ -2,6 +2,7 @@ require 'graphene/subtotals'
 
 module Graphene
   # Calculates and contains the percent subtotals of each attr (or attr group). Inherits from Graphene::ResultSet.
+  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::Charts for more documentation.
   # 
   # If you passed an options Hash containing :threshold to the constructor, 
   # any results falling below it will be excluded.
@@ -12,22 +13,21 @@ module Graphene
     private
 
     # Perform the calculations
-    def calculate!
+    def enumerate!
+      # First calcualte the subtotals
       super
-      calculate_percentages!
-    end
 
-    # Calculates the percentages
-    def calculate_percentages!
+      # Now replace them with the percentages
       total = resources.size.to_f
-      # Add in the percent
+      # Replace the subtotal with the percent
       @results.map! do |*args, count|
         percent = ((count * 100) / total).round(2)
-        [*args, percent, count]
+        [*args, percent]
       end
+
       # Drop results that are too small
       if options.has_key? :threshold
-        @results.reject! { |result| result[-2] < options[:threshold] }
+        @results.reject! { |result| result[-1] < options[:threshold] }
       end
     end
   end

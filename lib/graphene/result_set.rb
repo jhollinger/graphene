@@ -1,8 +1,11 @@
 module Graphene
-  # A generic class for Graphene stat result sets, which includes Enumerable.
+  # A generic class for Graphene stat result sets, which implements Enumerable and Graphene::LazyEnumerable.
   # Calculations are performed lazily, so ResultSet objects are *cheap to create, but not necessarily cheap to use*.
   class ResultSet
-    include Enumerable
+    include LazyEnumerable
+    include Tablize
+    include Charts
+
     # The options Hash passed in the constructor
     attr_reader :options
     # The attribute(s) that are being statted, passed in the constructor
@@ -21,10 +24,9 @@ module Graphene
       @results = []
     end
 
-    # Implements the "each" method required by Enumerable.
-    def each(&block)
-      lazy_calculate!
-      @results.each &block
+    # Calculates the resources, gropuing them by "over_x", which can be a method symbol or lambda
+    def over(over_x)
+      OverX.new(self, over_x)
     end
 
     # Returns a string representation of the results
@@ -32,29 +34,10 @@ module Graphene
       to_a.to_s
     end
 
-    # Tests equality between this and another set
-    def ==(other)
-      lazy_calculate!
-      @results == other.to_a
-    end
-
-    # Tests equality between this and another set
-    def ===(other)
-      lazy_calculate!
-      @results === other.to_a
-    end
-
     # Returns the maximum result
     def max_result
       x = attributes.size
       sort_by { |result| result[x] }.last[x]
-    end
-
-    private
-
-    # Run the calculation if it hasn't already been
-    def lazy_calculate!
-      calculate! if @results.empty?
     end
   end
 end

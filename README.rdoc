@@ -25,28 +25,6 @@ you will need to install Gruff manually. If you do not/cannot, Graphene's other 
 
 See http://nubyonrails.com/pages/gruff/ for more on Gruff.
 
-== Subtotals
-
-    # An array of objects which respond to methods like :browser, :platform, :date
-    logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
-
-    subtotals = Graphene.subtotals(logs, :browser)
-
-    puts subtotals.to_a
-    => [["Firefox", 120], ["Chrome", 112], ["Internet Explorer", 98]]
-
-    subtotals.each do |browser, count|
-      puts "There were #{count} hits from #{browser}"
-    end
-
-    # You can also calculate by multiple criteria, and can use lambdas instead of symbols
-    subtotals = Graphene.subtotals(logs, ->(l) { l.browser }, :platform)
-
-    puts subtotals.to_a
-    => [["Chrome", "OS X", 102], ["Internet Explorer", 98], ["Firefox", "Windows", 90], ["Firefox", "GNU/Linux", 30], ["Chrome", "GNU/Linux", 10]]
-
-See Graphene.subtotals for more info.
-
 == Percentages
 
     # An array of objects which respond to methods like :browser, :platform, :date
@@ -54,32 +32,40 @@ See Graphene.subtotals for more info.
 
     percentages = Graphene.percentages(logs, :browser)
 
-    # Includes both the percent and the subtotal
     puts percentages.to_a
-    => [["Firefox", 36.36, 120], ["Chrome", 33.93, 112], ["Internet Explorer", 29.69, 98]]
+    => [["Firefox", 40.0], ["Chrome", 35.0], ["Internet Explorer", 25.0]]
 
-    percentages.each do |browser, percentage, count|
-      puts "#{percentage}% of hits where from #{browser}"
+    percentages.each do |browser, count|
+      puts "There were #{count} hits from #{browser}"
     end
 
     # You can also calculate by multiple criteria, and can use lambdas instead of symbols
-    percentages = Graphene.percentages(logs, :browser, ->(l) { l.platform })
+    percentages = Graphene.percentages(logs, ->(l) { l.browser }, :platform)
+
+    puts percentages.to_a
+    => [["Chrome", "OS X", 40], ["Internet Explorer", "Windows", 25], ["Firefox", "Windows", 25], ["Firefox", "GNU/Linux", 8], ["Chrome", "GNU/Linux", 2]]
 
 See Graphene.percentages for more info.
+
+== Subtotals
+
+    Same as percentages above, except that subtotals are returned instead.
+
+See Graphene.subtotals for more info.
 
 == Tablizer
 
 Integration with the tablizer gem provides quick ASCII tables.
 
     puts percentages.tablize
-    => +-----------------+------------+-------+-----+
-       |     Browser     |  Platform  |Percent|Count|
-       +-----------------+------------+-------+-----+
-       |Firefox          |Windows     |50.0   |500  |
-       |Internet Explorer|Windows     |20.0   |200  |
-       |Safari           |OS X        |20.0   |200  |
-       |Firefox          |GNU/Linux   |10.0   |100  |
-       +-----------------+------------+-------+-----+
+    => +-----------------+------------+-------+
+       |     Browser     |  Platform  |Percent|
+       +-----------------+------------+-------+
+       |Firefox          |Windows     |50.0   |
+       |Internet Explorer|Windows     |20.0   |
+       |Safari           |OS X        |20.0   |
+       |Firefox          |GNU/Linux   |10.0   |
+       +-----------------+------------+-------+
 
 == Graphs
 
@@ -93,7 +79,7 @@ Extends Graphene by adding several helpers for generating graphs. Requires that 
     Graphene.percentages(ff, :browser).pie_chart('/path/to/ff-version-share.png', 'Firefox Version Share')
 
     # A line graph of daily browser numbers over time, tricked out with lots of options
-    Graphene.subtotals(logs, :browser).line_graph(:date, '/path/to/browser-share.png') do |chart, labeler|
+    Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/browser-share.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
       chart.theme = {
@@ -108,7 +94,7 @@ Extends Graphene by adding several helpers for generating graphs. Requires that 
       end
     end
 
-See Graphene::GruffHelpers for more graphs and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
+See Graphene::Charts and Graphene::Graphs for more types and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
 
 == License
 Copyright 2012 Jordan Hollinger

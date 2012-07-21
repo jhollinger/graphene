@@ -1,14 +1,24 @@
+# Required gems
+require 'tablizer'
+begin
+  require 'gruff'
+rescue LoadError => e
+  $stderr.puts "NOTICE Graphene cannot find Gruff; graphing will not be not available. Install the \"gruff\" gem in enable it."
+end
+
 require 'graphene/version'
 require 'graphene/exception'
 
-# Load calculators
-require 'graphene/result_set'
-require 'graphene/subtotals'
-require 'graphene/percentages'
-
-# Load formatters and helpers
+# Formatters and helpers
 require 'graphene/tablizer'
 require 'graphene/gruff'
 
-# Load main api
+# Calculators
+require 'graphene/lazy_enumerable'
+require 'graphene/result_set'
+require 'graphene/subtotals'
+require 'graphene/percentages'
+require 'graphene/over_x'
+
+# Main AI
 require 'graphene/graphene'

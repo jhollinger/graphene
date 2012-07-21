@@ -2,6 +2,7 @@ require 'graphene/result_set'
 
 module Graphene
   # Calculates and contains the subtotals of each attr (or attr group). Inherits from Graphene::ResultSet.
+  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::Charts for more documentation.
   # 
   # Don't create instance manually. Instead, use the Graphene.subtotals method, which will return
   # a properly instantiated object.
@@ -9,7 +10,7 @@ module Graphene
     private
 
     # Calculates the subtotals
-    def calculate!
+    def enumerate!
       # Count the occurrence of each
       results = resources.inject({}) do |res, resource|
         attrs = attributes.map { |attr| attr.respond_to?(:call) ? attr.call(resource) : resource.send(attr) }
