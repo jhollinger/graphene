@@ -151,6 +151,36 @@ module Graphene
     end
     alias_method :side_stacked_bar_graph, :side_stacked_bar_chart
 
+    # Returns a Gruff::Spider object with the stats set.
+    #
+    # Optionally you may pass a file path and chart title. If you pass a file path, the chart will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned chart object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::Spider object before it is
+    # written to file (that is, if you also passed a file path).
+    # 
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).spider_chart('/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.percentages(logs, :browser).spider_chart('/path/to/browser-share.png') do |chart|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = chart.theme_37signals
+    #  end
+    # 
+    # Example 3:
+    # 
+    #  blog = Graphene.subtotals(logs, :browser).spider_chart.to_blob
+    #
+    def spider_chart(path=nil, title=nil, &block)
+      chart(Gruff::Spider.new(max_result), path, title, false, &block)
+    end
+    alias_method :spider_graph, :spider_chart
+
     # Returns a Gruff::Line object with the stats set.  # 
     # "x_method" should be a method on "resources" a lambda that accepts a resource and returns a
     # value for the x axis.

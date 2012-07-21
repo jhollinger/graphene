@@ -44,6 +44,12 @@ module Graphene
       @results === other.to_a
     end
 
+    # Returns the maximum result
+    def max_result
+      x = attributes.size
+      sort_by { |result| result[x] }.last[x]
+    end
+
     private
 
     # Run the calculation if it hasn't already been
