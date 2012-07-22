@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe Graphene do
   it 'should calculate subtotals' do
-    stats = Graphene.subtotals(HITS, :browser)
+    stats = Graphene.subtotals($hits, :browser)
     answer = [["Internet Explorer", 20],
               ["Android", 19],
               ["Firefox", 7],
@@ -13,7 +13,7 @@ describe Graphene do
   end
 
   it 'should calculate percentages' do
-    stats = Graphene.percentages(HITS, :browser, :platform)
+    stats = Graphene.percentages($hits, :browser, :platform)
     answer = [["Internet Explorer", "Windows", 40.0],
               ["Android", "Android", 38.0],
               ["Firefox", "GNU/Linux", 10.0],
@@ -25,7 +25,7 @@ describe Graphene do
   end
 
   it 'should calculate percentages' do
-    stats = Graphene.percentages(HITS, ->(h) { h.browser }, :platform)
+    stats = Graphene.percentages($hits, ->(h) { h.browser }, :platform)
     answer = [["Internet Explorer", "Windows", 40.0],
               ["Android", "Android", 38.0],
               ["Firefox", "GNU/Linux", 10.0],
@@ -37,7 +37,7 @@ describe Graphene do
   end
 
   it 'should ignore stats below the threshold' do
-    stats = Graphene.percentages(HITS, :browser, :platform, :threshold => 3.0)
+    stats = Graphene.percentages($hits, :browser, :platform, :threshold => 3.0)
     answer = [["Internet Explorer", "Windows", 40.0],
             ["Android", "Android", 38.0],
             ["Firefox", "GNU/Linux", 10.0],
@@ -48,7 +48,7 @@ describe Graphene do
 
   context 'transmogrifier' do
     it 'should turn subtotals into percentages, and accept options' do
-      stats = Graphene.subtotals(HITS, :browser, :platform).percentages(:threshold => 3.0)
+      stats = Graphene.subtotals($hits, :browser, :platform).percentages(:threshold => 3.0)
       answer = [["Internet Explorer", "Windows", 40.0],
                 ["Android", "Android", 38.0],
                 ["Firefox", "GNU/Linux", 10.0],
@@ -58,7 +58,7 @@ describe Graphene do
     end
 
     it 'should turn percentages into subtotals' do
-      stats = Graphene.percentages(HITS, :browser, :threshold => 3.0).subtotals
+      stats = Graphene.percentages($hits, :browser, :threshold => 3.0).subtotals
       answer = [["Internet Explorer", 20],
                 ["Android", 19],
                 ["Firefox", 7],
@@ -69,7 +69,7 @@ describe Graphene do
     end
 
     it 'should persist options' do
-      stats = Graphene.percentages(HITS, :browser, :platform, :threshold => 3.0).subtotals.percentages
+      stats = Graphene.percentages($hits, :browser, :platform, :threshold => 3.0).subtotals.percentages
       answer = [["Internet Explorer", "Windows", 40.0],
                 ["Android", "Android", 38.0],
                 ["Firefox", "GNU/Linux", 10.0],

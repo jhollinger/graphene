@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe Graphene do
   it 'should calculate subtotals over dates' do
-    stats = Graphene.subtotals(HITS, :browser).over(:date)
+    stats = Graphene.subtotals($hits, :browser).over(:date)
     answer = {
       Date.parse('2011-05-04') => [["Internet Explorer", 20], ["Android", 19], ["Firefox", 5], ["Safari", 2]],
       Date.parse('2011-05-05') => [["Firefox", 2]],
