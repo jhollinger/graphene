@@ -1,4 +1,7 @@
 module Graphene
+  # Class for Graphene Exceptions
+  class GrapheneException < StandardError; end
+
   # For the given "resources", returns the share of the count that each attr(s) has.
   # 
   # "resources" is an array of objects which responds to the "args" method(s).

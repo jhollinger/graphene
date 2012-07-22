@@ -7,7 +7,7 @@ rescue LoadError => e
 end
 
 require 'graphene/version'
-require 'graphene/exception'
+require 'graphene/graphene'
 
 # Formatters and helpers
 require 'graphene/tablizer'
@@ -19,6 +19,3 @@ require 'graphene/result_set'
 require 'graphene/subtotals'
 require 'graphene/percentages'
 require 'graphene/over_x'
-
-# Main AI
-require 'graphene/graphene'

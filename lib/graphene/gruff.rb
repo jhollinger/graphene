@@ -255,7 +255,7 @@ module Graphene
     #
     #    # Both the 10 and the block are optional.
     #    #  - "10" means that only every 10'th label will be printed. Otherwise, each would be.
-    #    #  - The block is passed each label (the return value of "x_method") and may return a formatted version.
+    #    #  - The block is passed each label (the return value of the "over attribute") and may return a formatted version.
     #    labeler.call(10) do |date|
     #      date.strftime('%m/%d/%Y')
     #    end
@@ -265,9 +265,9 @@ module Graphene
     #
     #  Graphene.percentages(logs, :platform, :browser).over(->(l) { l.date.strftime('%m/%Y') }).line_graph('/path/to/os-browser-share.png', 'OS / Browser Share by Month')
     #
-    def line_graph(x_method, path=nil, title=nil, &block)
+    def line_graph(path=nil, title=nil, &block)
       Graphene.gruff do
-        graph(Gruff::Line.new, x_method, path, title, &block)
+        graph(Gruff::Line.new, path, title, &block)
       end
     end
     alias_method :line_chart, :line_graph
@@ -334,10 +334,10 @@ module Graphene
       end
 
       # Group the data on the x axis
-      to_a.each do |x_method, rows|
+      to_a.each do |x_attr, rows|
         groups = rows.group_by { |row| row[0..-2] }
         for attrs, dat in data
-          dat << (groups[attrs] ? groups[attrs].last : 0)
+          dat << (groups[attrs] ? groups[attrs].last.last : 0)
         end
       end
 
@@ -353,7 +353,7 @@ module Graphene
       graph.labels = Hash[*labels.select { |x| labels.index(x) % label_every_n == 0 }.map { |x| [*labels.index(x), labeler[x]] }.flatten]
 
       # Add data to the graph
-      data.each { |attrs, dat| graph.data attrs.join(' / '), dat }
+      data.each { |attrs, dat| graph.data(attrs.join(' / '), dat) }
 
       graph.write(path) unless path.nil?
       graph
