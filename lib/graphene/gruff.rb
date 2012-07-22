@@ -8,9 +8,8 @@ module Graphene
     end
   end
 
-  # Extends calculators with chart generators. Requires the Ruby "gruff" gem. 
-  # A "chart" in this sense is collections of label:number pairs.
-  module Charts
+  # Extends calculators with one-dimensional graphs, like pie charts.
+  module OneDGraphs
     # Returns a Gruff::Pie object with the stats set.
     #
     # Optionally you may pass a file path and graph title. If you pass a file path, the graph will
@@ -223,9 +222,8 @@ module Graphene
     end
   end
 
-  # Extends the calculators with graph generators. Requires the Ruby "gruff" gem.
-  # A "graph" in this sense a collection of label:number pairs spread out over an X axis.
-  module Graphs
+  # Extends calculators with two-dimensional graphs, like line graphs.
+  module TwoDGraphs
     # Returns a Gruff::Line object with the stats set.
     #
     # Optionally you may pass a file path and graph title. If you pass a file path, the graph will

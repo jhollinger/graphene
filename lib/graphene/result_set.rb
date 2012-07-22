@@ -4,7 +4,7 @@ module Graphene
   class ResultSet
     include LazyEnumerable
     include Tablize
-    include Charts
+    include OneDGraphs
 
     # The options Hash passed in the constructor
     attr_reader :options
@@ -25,6 +25,14 @@ module Graphene
     end
 
     # Calculates the resources, gropuing them by "over_x", which can be a method symbol or lambda
+    # 
+    # Example by date
+    # 
+    #  Graphene.percentages(logs, :browser).over(:date)
+    #  => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
+    #      #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
+    #      #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
+    #
     def over(over_x)
       OverX.new(self, over_x)
     end

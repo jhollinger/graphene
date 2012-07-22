@@ -2,7 +2,7 @@ require 'graphene/result_set'
 
 module Graphene
   # Calculates and contains the subtotals of each attr (or attr group). Inherits from Graphene::ResultSet.
-  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::Charts for more documentation.
+  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::OneDGraphs for more documentation.
   # 
   # Don't create instance manually. Instead, use the Graphene.subtotals method, which will return
   # a properly instantiated object.

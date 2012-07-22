@@ -1,6 +1,6 @@
 = Graphene
 
-Graphene is a library for calculating subtotals, percentages, tables and graphs from collections of Ruby objects.
+Graphene is a library for transforming collections of Ruby objects into subtotals, percentages, tables and graphs.
 It's most useful feature is probably the Gruff helpers. True, some types of Gruff charts are pretty simple to begin 
 with, but others can require tedious boilerplate code to calculate percentages, well-spaced labels, and more.
 Graphene hides all of that, accepting an array of objects and transforming them into a graph.
@@ -39,47 +39,42 @@ See http://nubyonrails.com/pages/gruff/ for more on Gruff.
       puts "There were #{count} hits from #{browser}"
     end
 
-    # You can also calculate by multiple criteria, and can use lambdas instead of symbols
-    percentages = Graphene.percentages(logs, ->(l) { l.browser }, :platform)
+    # You can also calculate by multiple criteria, and may use lambdas instead of symbols
+    percentages = Graphene.percentages(logs, ->(l) { l.browser.downcase }, :platform)
 
     puts percentages.to_a
-    => [["Chrome", "OS X", 40], ["Internet Explorer", "Windows", 25], ["Firefox", "Windows", 25], ["Firefox", "GNU/Linux", 8], ["Chrome", "GNU/Linux", 2]]
+    => [["chrome", "OS X", 40], ["internet explorer", "Windows", 25], ["firefox", "Windows", 25], ["firefox", "GNU/Linux", 8], ["chrome", "GNU/Linux", 2]]
 
 See Graphene.percentages for more info.
 
 == Subtotals
 
-    Same as percentages above, except that subtotals are returned instead.
-
-See Graphene.subtotals for more info.
+Same as percentages above, except that subtotals are returned instead. See Graphene.subtotals for more info.
 
 == Tablizer
 
 Integration with the tablizer gem provides quick ASCII tables.
 
     puts percentages.tablize
-    => +-----------------+------------+-------+
-       |     Browser     |  Platform  |Percent|
-       +-----------------+------------+-------+
-       |Firefox          |Windows     |50.0   |
-       |Internet Explorer|Windows     |20.0   |
-       |Safari           |OS X        |20.0   |
-       |Firefox          |GNU/Linux   |10.0   |
-       +-----------------+------------+-------+
+    => +-----------------+------------+----------+
+       |     Browser     |  Platform  |Percentage|
+       +-----------------+------------+----------+
+       |Firefox          |Windows     |50.0      |
+       |Internet Explorer|Windows     |20.0      |
+       |Safari           |OS X        |20.0      |
+       |Firefox          |GNU/Linux   |10.0      |
+       +-----------------+------------+----------+
 
 == Graphs
 
-Extends Graphene by adding several helpers for generating graphs. Requires that the Ruby "gruff" gem be installed.
-
-    # An array of objects which respond to methods like :browser, :platform, :date
-    logs = SomeLogParser.parse('/var/log/nginx/access.log.*')
+Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
 
     # A pie chart of Firefox version shares
     ff = logs.select { |e| e.browser == 'Firefox' }
-    Graphene.percentages(ff, :browser).pie_chart('/path/to/ff-version-share.png', 'Firefox Version Share')
+    Graphene.percentages(ff, :browser).pie_chart('/path/to/graph.png', 'FF Version Share')
 
     # A line graph of daily browser numbers over time, tricked out with lots of options
-    Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/browser-share.png') do |chart, labeler|
+    Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/graph.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
       chart.theme = {
@@ -94,7 +89,7 @@ Extends Graphene by adding several helpers for generating graphs. Requires that 
       end
     end
 
-See Graphene::Charts and Graphene::Graphs for more types and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
+See Graphene::OneDGraphs and Graphene::TwoDGraphs for more types and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
 
 == License
 Copyright 2012 Jordan Hollinger

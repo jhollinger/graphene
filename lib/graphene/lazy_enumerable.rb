@@ -1,7 +1,7 @@
 module Graphene
-  # Includes Enumerable and xalculates @results lazily. An enumerate! method must be implemented.
+  # Includes Enumerable and alculates @results lazily. An enumerate! method must be implemented.
   module LazyEnumerable
-    def self.included(base)
+    def self.included(base) # :nodoc:
       base.send(:include, Enumerable)
     end
 

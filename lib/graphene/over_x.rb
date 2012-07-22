@@ -1,14 +1,23 @@
 module Graphene
-  # Groups the stats of resources by the given attribute.
+  # Groups the stats of resources by the given method symbol or lambda.
+  # 
+  # Example by date
+  # 
+  #  Graphene.percentages(logs, :browser).over(:date)
+  #  => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
+  #      #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
+  #      #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
   #
-  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::Graphs for more documentation.
+  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::TwoDGraphs for more documentation.
   class OverX
     include LazyEnumerable
-    include Graphs
+    include TwoDGraphs
 
     # The attribute that are being statted, passed in the constructor
     attr_reader :result_set
 
+    # Accepts a ResultSet object (i.e. Graphene::Subtotals or Graphene::Percentages), and a
+    # method symbol or proc/lambda to build the X axis
     def initialize(result_set, attr_or_lambda)
       @result_set = result_set
       @attribute = attr_or_lambda
