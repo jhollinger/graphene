@@ -26,12 +26,12 @@ if defined? Gruff
 
     it 'should write a simple multiline graph' do
       Graphene.percentages($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == '4eddcafdbdd6b2936bfaade1b72990a6'
+      @md5[@file_path].should == '62f3371c4a6085860c64ccc8265a45c8'
     end
 
     it 'should write a simple multiline graph using subtotals instead of percentages' do
       Graphene.subtotals($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == 'b895e0427199791db53667d3465f28ca'
+      @md5[@file_path].should == 'ed8b16fd8e9cd39e3de06fda98882c5e'
     end
 
     it 'should write a formatted line graph' do
@@ -42,19 +42,19 @@ if defined? Gruff
           date.strftime('%m/%d/%Y')
         end
       end
-      @md5[@file_path].should == '9e05efd35cb8ff361dfc20ee6a0d62e0'
+      @md5[@file_path].should == 'b7a244f4706d32cb2f102759a69f2040'
     end
 
     it 'should write a monthly line graph' do
       Graphene.percentages($hits, :browser).over(->(e) { e.date.strftime('%m/%Y') },).line_graph(@file_path, 'Browser Share') do |chart, labeler|
         chart.theme = chart.theme_odeo
       end
-      @md5[@file_path].should == '263562b4e4eacbe283958116c7072c0d'
+      @md5[@file_path].should == '304ae3e3fcb894786d475d5b36955646'
     end
 
     it 'should write a net graph using percentages' do
       Graphene.percentages($hits, :browser).over(:date).net_graph(@file_path, 'Browser Shares')
-      @md5[@file_path].should == '13a1cef22766fce38b7b0d445f0dc8cb'
+      @md5[@file_path].should == '2253485e0334e270f2a16bc3081ba2b0'
     end
 
     it 'should write a simple bar graph' do
