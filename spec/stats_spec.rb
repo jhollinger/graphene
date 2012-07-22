@@ -45,4 +45,37 @@ describe Graphene do
             ["Firefox", "OS X", 4.0]]
     stats.should == answer
   end
+
+  context 'transmogrifier' do
+    it 'should turn subtotals into percentages, and accept options' do
+      stats = Graphene.subtotals(HITS, :browser, :platform).percentages(:threshold => 3.0)
+      answer = [["Internet Explorer", "Windows", 40.0],
+                ["Android", "Android", 38.0],
+                ["Firefox", "GNU/Linux", 10.0],
+                ["Safari", "iOS", 4.0],
+                ["Firefox", "OS X", 4.0]]
+      stats.should == answer
+    end
+
+    it 'should turn percentages into subtotals' do
+      stats = Graphene.percentages(HITS, :browser, :threshold => 3.0).subtotals
+      answer = [["Internet Explorer", 20],
+                ["Android", 19],
+                ["Firefox", 7],
+                ["Safari", 2],
+                ["Chromium", 1],
+                ["Epiphany", 1]]
+      stats.should == answer
+    end
+
+    it 'should persist options' do
+      stats = Graphene.percentages(HITS, :browser, :platform, :threshold => 3.0).subtotals.percentages
+      answer = [["Internet Explorer", "Windows", 40.0],
+                ["Android", "Android", 38.0],
+                ["Firefox", "GNU/Linux", 10.0],
+                ["Safari", "iOS", 4.0],
+                ["Firefox", "OS X", 4.0]]
+      stats.should == answer
+    end
+  end
 end

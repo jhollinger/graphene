@@ -39,5 +39,13 @@ module Graphene
       x = attributes.size
       sort_by { |result| result[x] }.last[x]
     end
+
+    private
+
+    # Change it to another ResultSet subclass
+    def transmogrify(klass, opts=nil)
+      opts ||= self.options
+      klass.new(resources, *attributes, opts)
+    end
   end
 end

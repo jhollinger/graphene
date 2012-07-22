@@ -7,6 +7,11 @@ module Graphene
   # Don't create instance manually. Instead, use the Graphene.subtotals method, which will return
   # a properly instantiated object.
   class Subtotals < ResultSet
+    # Convert the percentages to subtotals
+    def percentages(opts=nil)
+      transmogrify(Percentages, opts)
+    end
+
     private
 
     # Calculates the subtotals

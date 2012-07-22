@@ -9,18 +9,20 @@ module Graphene
   # 
   # Don't create instance manually. Instead, use the Graphene.percentages method, which will return
   # a properly instantiated object.
-  class Percentages < Subtotals
+  class Percentages < ResultSet
+    # Convert the percentages to subtotals
+    def subtotals(opts=nil)
+      @subtotals ||= transmogrify(Subtotals, opts)
+    end
+
     private
 
     # Perform the calculations
     def enumerate!
-      # First calcualte the subtotals
-      super
-
       # Now replace them with the percentages
       total = resources.size.to_f
       # Replace the subtotal with the percent
-      @results.map! do |*args, count|
+      @results = subtotals.map do |*args, count|
         percent = ((count * 100) / total).round(2)
         [*args, percent]
       end
