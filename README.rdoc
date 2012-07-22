@@ -91,6 +91,10 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
 
 See Graphene::OneDGraphs and Graphene::TwoDGraphs for more types and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
 
+== TODO
+
+Graphene::OverX and the graph helpers needs the ability to fill in empty points
+
 == License
 Copyright 2012 Jordan Hollinger
 
