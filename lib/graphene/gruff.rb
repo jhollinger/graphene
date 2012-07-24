@@ -362,6 +362,33 @@ module Graphene
     end
     alias_method :dot_chart, :dot_graph
 
+    # Returns a Gruff::AccumulatorBar object with the stats set. This is different than most other graphs in that it may only 
+    # have one row of data. For example, if you limit the browser to Firefox, it could show the relative gains in Firefox
+    # usage over time. You might start out with:
+    #
+    # Optionally you may pass a file path and graph title. If you pass a file path, the graph will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned graph object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::AccumulatorBar object before it is
+    # written to file (that is, if you also passed a file path). It will also give you access to a Proc
+    # for labeling the X axis.
+    # 
+    # Example:
+    # 
+    #  logs = SomeLogParser.parse('/logs/*').select { |log| log.browser == 'Firefox' }
+    #  Graphene.subtotals(logs, :browser).over(:date).accumulator_bar_graph('/path/to/firefox-share.png', 'Firefox Share')
+    #
+    def accumulator_bar_graph(path=nil, title=nil, &block)
+      Graphene.gruff do
+        begin
+          graph(Gruff::AccumulatorBar.new, path, title, &block)
+        rescue Gruff::IncorrectNumberOfDatasetsException => e
+          raise GrapheneException, "An Accumulator Bar Graph may only have one row of data - #{e.class.name}"
+        end
+      end
+    end
+
     private
 
     # Builds a graph

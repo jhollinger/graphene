@@ -62,6 +62,11 @@ if defined? Gruff
       @md5[@file_path].should == 'b856155bc1d1a09f1a8a94770f3d4b3a'
     end
 
+    it 'should write a simple dot graph' do
+      Graphene.subtotals($hits.select { |h| h.browser == 'Firefox' }, :browser).over(:date).accumulator_bar_graph(@file_path, 'Firefox Share')
+      @md5[@file_path].should == '45d6e6641bd4a605d814c3593b8bcaae'
+    end
+
     it 'should write a simple bar graph' do
       Graphene.subtotals($hits, :browser).bar_chart(@file_path, 'Browser Numbers')
       @md5[@file_path].should == '9e7c663c9f4f19030508d415bc9a1b04'
