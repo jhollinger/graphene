@@ -89,7 +89,11 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
       end
     end
 
-See Graphene::OneDGraphs and Graphene::TwoDGraphs for more types and examples. See http://gruff.rubyforge.org/classes/Gruff/Base.html for more Gruff options.
+See Graphene::OneDGraphs and Graphene::TwoDGraphs for more types and examples.
+
+See http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/README_txt.html for more on Gruff.
+Specifically, http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/Gruff/Base.html will let 
+you know many things that can be customized in the optional block.
 
 == TODO
 
