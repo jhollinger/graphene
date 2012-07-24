@@ -35,8 +35,8 @@ See http://nubyonrails.com/pages/gruff/ for more on Gruff.
     puts percentages.to_a
     => [["Firefox", 40.0], ["Chrome", 35.0], ["Internet Explorer", 25.0]]
 
-    percentages.each do |browser, count|
-      puts "There were #{count} hits from #{browser}"
+    percentages.each do |browser, percent|
+      puts "#{percent}% of hits were from from #{browser}"
     end
 
     # You can also calculate by multiple criteria, and may use lambdas instead of symbols
