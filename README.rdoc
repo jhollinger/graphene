@@ -51,6 +51,15 @@ See Graphene.percentages for more info.
 
 Same as percentages above, except that subtotals are returned instead. See Graphene.subtotals for more info.
 
+== Adding a dimension
+
+Marty, you're not thinking fourth-dimensionally!
+
+    puts Graphene.percentages(logs, :browser).over(:date)
+    => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
+        #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
+        #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
+
 == Tablizer
 
 Integration with the tablizer gem provides quick ASCII tables.
