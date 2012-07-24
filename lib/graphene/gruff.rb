@@ -388,6 +388,7 @@ module Graphene
         end
       end
     end
+    alias_method :accumulator_bar_chart, :accumulator_bar_graph
 
     private
 
