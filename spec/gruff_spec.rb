@@ -57,6 +57,11 @@ if defined? Gruff
       @md5[@file_path].should == '2253485e0334e270f2a16bc3081ba2b0'
     end
 
+    it 'should write a simple dot graph' do
+      Graphene.percentages($hits, :browser).over(:date).dot_graph(@file_path, 'Browser Share')
+      @md5[@file_path].should == 'b856155bc1d1a09f1a8a94770f3d4b3a'
+    end
+
     it 'should write a simple bar graph' do
       Graphene.subtotals($hits, :browser).bar_chart(@file_path, 'Browser Numbers')
       @md5[@file_path].should == '9e7c663c9f4f19030508d415bc9a1b04'

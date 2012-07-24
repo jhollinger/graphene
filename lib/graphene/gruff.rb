@@ -316,6 +316,52 @@ module Graphene
     end
     alias_method :net_chart, :net_graph
 
+    # Returns a Gruff::Dot object with the stats set.
+    #
+    # Optionally you may pass a file path and graph title. If you pass a file path, the graph will
+    # be written to file automatically. Otherwise, you would call "write('/path/to/graph.png')" on the
+    # returned graph object.
+    #
+    # If you pass a block, it will be called, giving you access to the Gruff::Dot object before it is
+    # written to file (that is, if you also passed a file path). It will also give you access to a Proc
+    # for labeling the X axis.
+    #
+    # Example 1:
+    # 
+    #  Graphene.percentages(logs, :browser).over(:date).dot_graph('/path/to/browser-share.png', 'Browser Share')
+    #
+    # Example 2:
+    #
+    #  Graphene.subtotals(logs, :browser).over(:date).dot_graph('/path/to/browser-share.png') do |chart, labeler|
+    #    chart.title = 'Browser Share'
+    #    chart.font = '/path/to/font.ttf'
+    #    chart.theme = pie.theme_37signals
+    #  end
+    #
+    # Example 3:
+    #
+    #  Graphene.subtotals(logs, :browser).over(:date).dot_graph('/path/to/browser-share.png') do |chart, labeler|
+    #    chart.title = 'Browser Share'
+    #
+    #    # Both the 10 and the block are optional.
+    #    #  - "10" means that only every 10'th label will be printed. Otherwise, each would be.
+    #    #  - The block is passed each label (the return value of the "over attribute") and may return a formatted version.
+    #    labeler.call(10) do |date|
+    #      date.strftime('%m/%d/%Y')
+    #    end
+    #  end
+    #
+    # Example 4:
+    #
+    #  Graphene.percentages(logs, :platform, :browser).over(->(l) { l.date.strftime('%m/%Y') }).dot_graph('/path/to/os-browser-share.png', 'OS / Browser Share by Month')
+    #
+    def dot_graph(path=nil, title=nil, &block)
+      Graphene.gruff do
+        graph(Gruff::Dot.new, path, title, &block)
+      end
+    end
+    alias_method :dot_chart, :dot_graph
+
     private
 
     # Builds a graph
