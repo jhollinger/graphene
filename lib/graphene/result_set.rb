@@ -32,9 +32,14 @@ module Graphene
     #  => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
     #      #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
     #      #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
+    # 
+    # To ensure there are no gaps along the "x axis", you can pass an array, range, lambda, or block.
+    # 
+    #  Graphene.percentages(logs, :browser).over(:date, (start_date..end_date))
+    #  Graphene.percentages(logs, :browser).over(:date) { |date| date + 1 }
     #
-    def over(over_x)
-      OverX.new(self, over_x)
+    def over(over_x, filler=nil, &filler_block)
+      OverX.new(self, over_x, filler, &filler_block)
     end
 
     # Returns a string representation of the results

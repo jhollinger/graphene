@@ -1,3 +1,7 @@
+** RELEASE 0.0.3 (?) **
+
+* Add an optional argument to #over allowing any X gaps to be filled in
+
 ** RELEASE 0.0.2 (07/23/2012) **
 
 * Added Accumulator Bar graph

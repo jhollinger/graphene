@@ -53,12 +53,27 @@ Same as percentages above, except that subtotals are returned instead. See Graph
 
 == Adding a dimension
 
-Marty, you're not thinking fourth-dimensionally!
+"Marty, you're not thinking fourth-dimensionally!" This is only three dimensions, but whatever, Doc.
 
     puts Graphene.percentages(logs, :browser).over(:date)
     => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
-        #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
-        #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
+        #<Date: 2012-07-24> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
+        #<Date: 2012-07-25> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
+
+As you can see above, there were no log entries on 2012-07-23, so there is a gap in the X axis. That can be a problem when you're generating graphs.
+There are two ways to make sure any X gaps are filled in.
+
+    # Pass all the X points in an array, Range, or any other object implementing #to_a
+    => Graphene.percentages(logs, :browser).over(:date, (Date.new(2012, 7, 22)..Date.new(2012, 7, 25)))
+    # or pass a block that accepts X and returns X+1
+    => Graphene.percentages(logs, :browser).over(:date) { |date| date + 1 }
+
+Either of those will give you the following:
+
+    => {#<Date: 2012-07-22> => [["Firefox", 45], ["Chrome", 40], ["Internet Explorer", 15]],
+        #<Date: 2012-07-23> => [],
+        #<Date: 2012-07-24> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
+        #<Date: 2012-07-25> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
 
 == Tablizer
 
@@ -83,7 +98,7 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
     Graphene.percentages(ff, :browser).pie_chart('/path/to/graph.png', 'FF Version Share')
 
     # A line graph of daily browser numbers over time, tricked out with lots of options
-    Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/graph.png') do |chart, labeler|
+    Graphene.subtotals(logs, :browser).over(:date, ->(date) { date + 1 }).line_graph('/path/to/graph.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
       chart.theme = {
