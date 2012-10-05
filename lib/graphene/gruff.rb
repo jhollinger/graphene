@@ -1,4 +1,12 @@
 module Graphene
+  class << self
+    # The default Gruff font path
+    attr_accessor :font
+
+    # The default Gruff theme
+    attr_accessor :theme
+  end
+
   # Executes the given block if Gruff is available. Raises a GrapheneException if not.
   def self.gruff
     if defined? Gruff
@@ -6,6 +14,14 @@ module Graphene
     else
       raise GrapheneException, "Gruff integration is disabled because Gruff could not be loaded; install the \"gruff\" gem"
     end
+  end
+
+  private
+
+  # Apply the default theme and font to the given Gruff chart
+  def self.theme!(chart)
+    chart.font = self.font if self.font
+    chart.theme = self.theme if self.theme
   end
 
   # Extends calculators with one-dimensional graphs, like pie charts.
@@ -206,6 +222,7 @@ module Graphene
 
     # Builds a chart
     def chart(chart, path=nil, title=nil, hack=false, &block)
+      Graphene.theme! chart
       chart.title = title unless title.nil?
       block.call(chart) if block
 
@@ -394,6 +411,7 @@ module Graphene
 
     # Builds a graph
     def graph(graph, path=nil, title=nil, &block)
+      Graphene.theme! graph
       graph.title = title unless title.nil?
 
       # Create an empty array for each group (e.g. {["Firefox"] => [], ["Safari"] => []}), even if it's empty.
