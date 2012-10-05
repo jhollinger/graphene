@@ -84,7 +84,7 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
     Graphene.percentages(ff, :browser).pie_chart('/path/to/graph.png', 'FF Version Share')
 
     # A line graph of daily browser numbers over time, tricked out with lots of options
-    Graphene.subtotals(logs, :browser).over(:date, ->(date) { date + 1 }).line_graph('/path/to/graph.png') do |chart, labeler|
+    Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/graph.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
       chart.theme = {
