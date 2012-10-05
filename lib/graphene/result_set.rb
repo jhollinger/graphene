@@ -33,10 +33,11 @@ module Graphene
     #      #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
     #      #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
     # 
-    # To ensure there are no gaps along the "x axis", you can pass an array, range, lambda, or block.
+    # If your X objects can be put into a range, Graphene will attempt to fill in any gaps along the X axis.
+    # But if they can't be ranged (e.g. formatted strings), you have several options to fill them in yourself:
     # 
-    #  Graphene.percentages(logs, :browser).over(:date, (start_date..end_date))
-    #  Graphene.percentages(logs, :browser).over(:date) { |date| date + 1 }
+    #  Graphene.percentages(logs, :browser).over(->(l) { l.date.strftime('%B %Y') }, [an array of all month/year in the logs])
+    #  Graphene.percentages(logs, :browser).over(->(l) { l.date.strftime('%B %Y') }) { |str| somehow parse the month/year and return the next one }
     #
     def over(over_x, filler=nil, &filler_block)
       OverX.new(self, over_x, filler, &filler_block)

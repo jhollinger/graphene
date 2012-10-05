@@ -4,7 +4,7 @@ require 'digest/md5'
 if defined? Gruff
   describe Graphene do
     before :each do
-      @file_path = '/tmp/double_agent_graph_test.png'
+      @file_path = '/tmp/gruff_graph_test.png'
       @md5 = ->(path) { Digest::MD5.hexdigest(File.read(path)) }
     end
 
@@ -25,20 +25,13 @@ if defined? Gruff
     end
 
     it 'should write a simple multiline graph' do
-      Graphene.percentages($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == '62f3371c4a6085860c64ccc8265a45c8'
-    end
-
-    it 'should write a simple multiline graph, filling in any x points' do
-      Graphene.percentages($hits, :browser).over(:date, ->(date) { date + 1 }).line_graph(@file_path, 'Browser Share') do |chart, labeler|
-        labeler.call 14
-      end
-      @md5[@file_path].should == 'b4ffe7c209d61a60fb6d48454487373d'
+      Graphene.percentages($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share') { |chart, labeler| labeler.call(3) }
+      @md5[@file_path].should == 'e9566b380c011ed7c1bd5bebab0e0fa5'
     end
 
     it 'should write a simple multiline graph using subtotals instead of percentages' do
-      Graphene.subtotals($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == 'ed8b16fd8e9cd39e3de06fda98882c5e'
+      Graphene.subtotals($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share') { |chart, labeler| labeler.call(3) }
+      @md5[@file_path].should == '4f09c132d4ce4bbd971dfc5e28a91a8d'
     end
 
     it 'should write a formatted line graph' do
@@ -49,37 +42,29 @@ if defined? Gruff
           date.strftime('%m/%d/%Y')
         end
       end
-      @md5[@file_path].should == 'b7a244f4706d32cb2f102759a69f2040'
+      @md5[@file_path].should == '6c8b2ebdd10830d647039c877b0b2ac6'
     end
 
     it 'should write a monthly line graph' do
-      Graphene.percentages($hits, :browser).over(->(e) { e.date.strftime('%m/%Y') },).line_graph(@file_path, 'Browser Share') do |chart, labeler|
+      Graphene.percentages($hits, :browser).over(->(e) { e.date.strftime('%m/%Y') }).line_graph(@file_path, 'Browser Share') do |chart, labeler|
         chart.theme = chart.theme_odeo
       end
-      @md5[@file_path].should == '304ae3e3fcb894786d475d5b36955646'
-    end
-
-    it 'should write a monthly line graph, filling in any missing x points' do
-      all_months = ($hits.first.date..$hits.last.date).to_a.map { |date| date.strftime('%m/%Y') }.uniq
-      Graphene.percentages($hits, :browser).over(->(e) { e.date.strftime('%m/%Y') }, all_months).line_graph(@file_path, 'Browser Share') do |chart, labeler|
-        chart.theme = chart.theme_odeo
-      end
-      @md5[@file_path].should == 'fac1f97d0439999517ffedc89547c683'
+      @md5[@file_path].should == 'a79e0c98171f57cf555bf4be3ec07d19'
     end
 
     it 'should write a net graph using percentages' do
       Graphene.percentages($hits, :browser).over(:date).net_graph(@file_path, 'Browser Shares')
-      @md5[@file_path].should == '2253485e0334e270f2a16bc3081ba2b0'
+      @md5[@file_path].should == 'd3dabc7b1e01966b4246dcdec39fe4c4'
     end
 
     it 'should write a simple dot graph' do
       Graphene.percentages($hits, :browser).over(:date).dot_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == 'b856155bc1d1a09f1a8a94770f3d4b3a'
+      @md5[@file_path].should == 'b14815cdaf44bbda831fc536f5e92401'
     end
 
     it 'should write a simple dot graph' do
       Graphene.subtotals($hits.select { |h| h.browser == 'Firefox' }, :browser).over(:date).accumulator_bar_graph(@file_path, 'Firefox Share')
-      @md5[@file_path].should == '45d6e6641bd4a605d814c3593b8bcaae'
+      @md5[@file_path].should == '99d6bf407c50cd237b22d77aee9da3a1'
     end
 
     it 'should write a simple bar graph' do
