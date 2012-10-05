@@ -48,41 +48,45 @@ module Graphene
     def enumerate!
       # Group all the objects by X
       resources_by_x = result_set.resources.group_by(&@attribute).sort_by(&:first)
-      first_x = resources_by_x.first.first
+      # Attempt to retrieve or calculate all possible X points, so there are no gaps
+      x_points_hash = Hash[x_points(resources_by_x).map { |x| [x, []] }]
+      # Distribute the objects across the X points
+      @results = resources_by_x.inject(x_points_hash) do |results, (x, group)|
+        results[x] ||= []
+        results[x] += result_set.class.new(group, *result_set.attributes).to_a
+        results
+      end
+    end
 
-      # Pre-populate all possible X points using...
-      # ...a range from the first to last point
-      x_points = if @filler.nil? and first_x.respond_to? :succ and first_x.respond_to? :"<=>" and (!first_x.is_a?(String) or first_x.size == 1)
-        range = (first_x..resources_by_x.last.first)
-        Hash[range.to_a.map { |x| [x, []]}]
-      # ...an array
+    # Returns an array of all pre-calculated (or provided) X points. Attempts to fill in any gaps.
+    def x_points(resources_by_x)
+      first_x = resources_by_x.first ? resources_by_x.first.first : nil
+      last_x = resources_by_x.last ? resources_by_x.last.first : nil
+
+      # A range from the first to last point (multi-char strings are excluded, because a range of those is usually not what you want)
+      if @filler.nil? and first_x.respond_to? :succ and first_x.respond_to? :"<=>" and (!first_x.is_a?(String) or first_x.size == 1)
+        (first_x..last_x).to_a
+      # An array
       elsif @filler.respond_to? :to_a
-        Hash[@filler.to_a.map { |f| [f, []] }]
-      # ...a block
+        @filler.to_a
+      # A block
       elsif @filler.respond_to? :call
         keys = resources_by_x.map(&:first)
-        keys.each_with_index.to_a.inject({}) do |hash, (key, i)|
-          hash[key] = []
+        keys.each_with_index.to_a.inject([]) do |points, (key, i)|
+          points << key
           # Fill in any gaps between this point and the next
           if next_available_key = keys[i+1]
             next_calculated_key = key
             while next_calculated_key < next_available_key
-              hash[next_calculated_key] = []
+              points << next_calculated_key
               next_calculated_key = @filler.call(next_calculated_key) 
             end
           end
-          hash
+          points
         end
-      # ...nothing
+      # Can't do it, so there may be gaps
       else
-        {}
-      end
-
-      # Distribute the objects across the X points
-      @results = resources_by_x.inject(x_points) do |results, (x, group)|
-        results[x] ||= []
-        results[x] += result_set.class.new(group, *result_set.attributes).to_a
-        results
+        []
       end
     end
   end
