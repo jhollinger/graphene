@@ -21,6 +21,27 @@ describe Graphene do
     stats.should == FILLED_IN_ANSWER
   end
 
+  it 'should have some protection against infinite loops when using a block' do
+    stats = Graphene.subtotals($hits, :browser).over(:date) { |date| date + 7 }
+    stats.should == {
+      Date.new(2012,6,30) => [["Internet Explorer", 20], ["Android", 19], ["Firefox", 5], ["Safari", 2]],
+      Date.new(2012,7,2) => [["Firefox", 2]],
+      Date.new(2012,7,9) => [],
+      Date.new(2012,7,10) => [["Chromium", 1]],
+      Date.new(2012,7,12) => [["Epiphany", 1]]
+    }
+  end
+
+  it 'should fill in missing months using a block' do
+    stats = Graphene.subtotals($hits, :browser).over(->(hit) { [hit.date.month, hit.date.year] }) do |month, year|
+      month < 12 ? [month + 1, year] : [1, year + 1]
+    end
+    stats.should == {
+      [6, 2012] => [["Internet Explorer", 20], ["Android", 19], ["Firefox", 5], ["Safari", 2]],
+      [7, 2012] => [["Firefox", 2],["Chromium", 1], ["Epiphany", 1]]
+    }
+  end
+
   it 'should fill in missing months using an array' do
     stats = Graphene.subtotals($hits, :browser).over(->(hit) { hit.date.strftime('%B %Y') }, ['May 2012', 'June 2012', 'July 2012'])
     stats.should == {

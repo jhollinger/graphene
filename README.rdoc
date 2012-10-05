@@ -61,6 +61,17 @@ Same as percentages above, except that subtotals are returned instead. See Graph
         #<Date: 2012-07-24> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
         #<Date: 2012-07-25> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
 
+Notice that in the results above, there were no log entries on 2012-07-23. The only reason that date showed up at all is because dates are iterable.
+If your X axis objects are not iterable and you're afraid that empty ones will be skipped over, you can provide them yourself:
+
+    # Ryan didn't make any sales, so he won't show up unless we include his name
+    puts Graphene.subtotals(sales, :reams).over(:name, ['Jim', 'Dwight', 'Ryan'])
+
+    # Ruby doesn't know how to iterate months, but you do
+    puts Graphene.percentages(logs, :browser).over(->(log) { [log.date.month, log.date.year] }) do |month, year|
+      month < 12 ? [month + 1, year] : [1, year + 1]
+    end
+
 == Tablizer
 
 Integration with the tablizer gem provides quick ASCII tables.

@@ -77,7 +77,11 @@ module Graphene
           # Fill in any gaps between this point and the next
           if next_available_key = keys[i+1]
             next_calculated_key = key
-            while next_calculated_key < next_available_key
+            while next_calculated_key != next_available_key
+              # Try to prevent an infinite loop if someone does something dumb
+              if next_calculated_key.respond_to? :"<"
+                break unless next_calculated_key < next_available_key
+              end
               points << next_calculated_key
               next_calculated_key = @filler.call(next_calculated_key) 
             end
