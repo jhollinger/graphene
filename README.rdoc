@@ -5,8 +5,6 @@ It's most useful feature is probably the Gruff helpers. True, some types of Gruf
 with, but others can require tedious boilerplate code to calculate percentages, well-spaced labels, and more.
 Graphene hides all of that, accepting an array of objects and transforming them into a graph.
 
-Read the full documentation at http://jordanhollinger.com/docs/graphene/.
-
 Nobody likes you, Ruby 1.8. Now go away.
 
 == Installation
