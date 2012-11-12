@@ -114,10 +114,6 @@ See http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/README_txt.html for mo
 Specifically, http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/Gruff/Base.html will let 
 you know many things that can be customized in the optional block.
 
-== TODO
-
-Graphene::OverX and the graph helpers needs the ability to fill in empty points
-
 == License
 Copyright 2012 Jordan Hollinger
 
