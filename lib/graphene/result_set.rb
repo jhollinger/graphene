@@ -1,5 +1,5 @@
 module Graphene
-  # A generic class for Graphene stat result sets, which implements Enumerable and Graphene::LazyEnumerable.
+  # A generic class for Graphene stat result sets, which implements Enumerable and LazyEnumerable.
   # Calculations are performed lazily, so ResultSet objects are *cheap to create, but not necessarily cheap to use*.
   class ResultSet
     include LazyEnumerable

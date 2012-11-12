@@ -8,7 +8,7 @@ module Graphene
   #      #<Date: 2012-07-23> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
   #      #<Date: 2012-07-24> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
   #
-  # See Graphene::LazyEnumerable, Graphene::Tablize and Graphene::TwoDGraphs for more documentation.
+  # See LazyEnumerable, Graphene::Tablize and Graphene::TwoDGraphs for more documentation.
   # 
   # If your X objects can be put into a range, Graphene will attempt to fill in any gaps along the X axis.
   # But if they can't be ranged (e.g. formatted strings), you have several options to fill them in yourself:

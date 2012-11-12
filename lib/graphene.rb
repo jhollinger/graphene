@@ -14,7 +14,7 @@ require 'graphene/tablizer'
 require 'graphene/gruff'
 
 # Calculators
-require 'graphene/lazy_enumerable'
+require 'lazy_enumerable'
 require 'graphene/result_set'
 require 'graphene/subtotals'
 require 'graphene/percentages'
