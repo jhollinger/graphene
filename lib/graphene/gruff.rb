@@ -12,7 +12,7 @@ module Graphene
     if defined? Gruff
       yield if block_given?
     else
-      raise GrapheneException, "Gruff integration is disabled because Gruff could not be loaded; install the \"gruff\" gem"
+      raise GrapheneException, "Gruff integration is disabled because Gruff could not be found; bundle or install the \"rmagick\" and \"gruff\" gems to enable it"
     end
   end
 
