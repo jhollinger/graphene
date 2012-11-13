@@ -14,24 +14,24 @@ if defined? Gruff
 
     it 'should write a simple pie chart' do
       Graphene.percentages($hits, :browser).pie_chart(@file_path, 'Browser Share')
-      @md5[@file_path].should == 'c58e8724efe6f94e421e78a19fd51c6b'
+      @md5[@file_path].should == '3f5454834f257d859eccf3a0770cea3c'
     end
 
     it 'should write a complex pie chart' do
       Graphene.percentages($hits, :browser).pie_chart(@file_path) do |pie|
         pie.title = 'Browser Share'
       end
-      @md5[@file_path].should == 'c58e8724efe6f94e421e78a19fd51c6b'
+      @md5[@file_path].should == '3f5454834f257d859eccf3a0770cea3c'
     end
 
     it 'should write a simple multiline graph' do
       Graphene.percentages($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share') { |chart, labeler| labeler.call(3) }
-      @md5[@file_path].should == 'e9566b380c011ed7c1bd5bebab0e0fa5'
+      @md5[@file_path].should == '5bba4eea614d30a0b02f829d005056a9'
     end
 
     it 'should write a simple multiline graph using subtotals instead of percentages' do
       Graphene.subtotals($hits, :browser).over(:date).line_graph(@file_path, 'Browser Share') { |chart, labeler| labeler.call(3) }
-      @md5[@file_path].should == '4f09c132d4ce4bbd971dfc5e28a91a8d'
+      @md5[@file_path].should == '0b75e8c42728d15471688e891d863a99'
     end
 
     it 'should write a formatted line graph' do
@@ -42,66 +42,66 @@ if defined? Gruff
           date.strftime('%m/%d/%Y')
         end
       end
-      @md5[@file_path].should == '6c8b2ebdd10830d647039c877b0b2ac6'
+      @md5[@file_path].should == '7b7b4f49064629654a7bee05e39984ef'
     end
 
     it 'should write a monthly line graph' do
       Graphene.percentages($hits, :browser).over(->(e) { e.date.strftime('%m/%Y') }).line_graph(@file_path, 'Browser Share') do |chart, labeler|
         chart.theme = chart.theme_odeo
       end
-      @md5[@file_path].should == 'a79e0c98171f57cf555bf4be3ec07d19'
+      @md5[@file_path].should == 'a5033b47cff43bc83541a04169ca0119'
     end
 
     it 'should write a net graph using percentages' do
       Graphene.percentages($hits, :browser).over(:date).net_graph(@file_path, 'Browser Shares')
-      @md5[@file_path].should == 'd3dabc7b1e01966b4246dcdec39fe4c4'
+      @md5[@file_path].should == 'feb1b25692c2fca82079fb68e1e433f7'
     end
 
     it 'should write a simple dot graph' do
       Graphene.percentages($hits, :browser).over(:date).dot_graph(@file_path, 'Browser Share')
-      @md5[@file_path].should == 'b14815cdaf44bbda831fc536f5e92401'
+      @md5[@file_path].should == '77cd2dd3497dcea075c33b5cd15364be'
     end
 
-    it 'should write a simple dot graph' do
+    it 'should write a accumulator bar graph' do
       Graphene.subtotals($hits.select { |h| h.browser == 'Firefox' }, :browser).over(:date).accumulator_bar_graph(@file_path, 'Firefox Share')
-      @md5[@file_path].should == '99d6bf407c50cd237b22d77aee9da3a1'
+      @md5[@file_path].should == '8dcf7fd03ad3fb435d5e2a5b3fb0aaa2'
     end
 
     it 'should write a simple bar graph' do
       Graphene.subtotals($hits, :browser).bar_chart(@file_path, 'Browser Numbers')
-      @md5[@file_path].should == '9e7c663c9f4f19030508d415bc9a1b04'
+      @md5[@file_path].should == 'e6fd73face551d7c19a559db4da7e343'
     end
 
     it 'should write a more complicated bar graph' do
       Graphene.subtotals($hits, :browser, :platform).bar_chart(@file_path) do |chart|
         chart.title = 'Browser / OS Numbers'
       end
-      @md5[@file_path].should == 'b40823b3b2e54a95057242d9ded34bee'
+      @md5[@file_path].should == 'aa1e86d65f1b1fefe0928789935b9e5e'
     end
 
     it 'should write a bar graph using percents' do
       Graphene.percentages($hits, :browser).bar_chart(@file_path, 'Browser % Shares')
-      @md5[@file_path].should == '5dbee13f6b214043724e729de79de00f'
+      @md5[@file_path].should == '76437f287623a570f2bbe2055e4c959c'
     end
 
     it 'should write a stacked bar graph using percents' do
       Graphene.percentages($hits, :browser).stacked_bar_chart(@file_path, 'Browser % Shares')
-      @md5[@file_path].should == 'eae4eb2a780a0156a986099dbccf632c'
+      @md5[@file_path].should == 'af9863530863f5fb3c2ef1b4c40195da'
     end
 
     it 'should write a side bar graph using subtotals' do
       Graphene.subtotals($hits, :browser).side_bar_chart(@file_path, 'Browser Shares')
-      @md5[@file_path].should == '0f06544c311cba1be66f705f052b8374'
+      @md5[@file_path].should == '00e3462cc2109a056397998ab13bf40c'
     end
 
     it 'should write a stacked side bar graph using subtotals' do
       Graphene.subtotals($hits, :browser).side_stacked_bar_chart(@file_path, 'Browser Shares')
-      @md5[@file_path].should == 'dcdc1d1c7938f0d6c4c93a70a9677f59'
+      @md5[@file_path].should == '210251d6c13827ee101f00f56077c190'
     end
 
     it 'should write a spider chart using subtotals' do
       Graphene.subtotals($hits, :browser).spider_chart(@file_path, 'Browser Shares')
-      @md5[@file_path].should == '9aaa22a4ac06b0932343aaf9151c75c2'
+      @md5[@file_path].should == 'e7863db371373c1c6d7ad833492a70fd'
     end
   end
 else
