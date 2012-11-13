@@ -2,7 +2,7 @@
 require 'tablizer'
 begin
   require 'gruff'
-rescue LoadError => e
+rescue LoadError
 end
 
 require 'graphene/version'
