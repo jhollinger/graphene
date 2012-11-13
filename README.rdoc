@@ -96,11 +96,7 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
     Graphene.subtotals(logs, :browser).over(:date).line_graph('/path/to/graph.png') do |chart, labeler|
       chart.title = 'Browser Share'
       chart.font = '/path/to/awesome/font.ttf'
-      chart.theme = {
-        :colors => %w(orange purple green white red),
-        :marker_color => 'blue',
-        :background_colors => %w(black grey)
-      }
+      chart.theme = Graphene::Themes.rainy_day
 
       # Only show every 7th label, and make dates pretty
       labeler.call(7) do |date|

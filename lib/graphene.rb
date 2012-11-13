@@ -11,6 +11,7 @@ require 'graphene/graphene'
 # Formatters and helpers
 require 'graphene/tablizer'
 require 'graphene/gruff'
+require 'graphene/themes'
 
 # Calculators
 require 'lazy_enumerable'
