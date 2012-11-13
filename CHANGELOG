@@ -1,4 +1,4 @@
-** RELEASE 0.0.3 (?) **
+** RELEASE 0.1.0 (11/13/2012) **
 
 * Automamtically try to fill in any gaps in X. Optional argument to #over allowing any X gaps to be filled in.
 * Add Graphene.font and Graphene.theme, which allows the user to set default for all Gruff graphs.

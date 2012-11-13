@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Easily create stats and graphs from collections of Ruby objects"
   spec.description = "Library for calculating subtotals, percentages, tables and graphs from collections of Ruby objects"
   spec.authors = ['Jordan Hollinger']
-  spec.date = '2012-07-23'
+  spec.date = '2012-11-13'
   spec.email = 'jordan@jordanhollinger.com'
   spec.homepage = 'http://github.com/jhollinger/graphene'
 
