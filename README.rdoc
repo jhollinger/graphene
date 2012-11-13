@@ -59,8 +59,8 @@ Same as percentages above, except that subtotals are returned instead. See Graph
         #<Date: 2012-07-24> => [["Firefox", 41], ["Chrome", 40], ["Internet Explorer", 19]],
         #<Date: 2012-07-25> => [["Chrome", 50], ["Firefox", 40], ["Internet Explorer", 10]]}
 
-Notice that in the results above, there were no log entries on 2012-07-23. The only reason that date showed up at all is because dates are iterable.
-If your X axis objects are not iterable and you're afraid that empty ones will be skipped over, you can provide them yourself:
+Notice that in the results above, there were no log entries on 2012-07-23. So how did Graphene know to include that date? Because dates are iterable.
+If your X axis objects are *not* iterable and you want to ensure that none are left out, you can provide them yourself:
 
     # Ryan didn't make any sales, so he won't show up unless we include his name
     puts Graphene.subtotals(sales, :reams).over(:name, ['Jim', 'Dwight', 'Ryan'])
@@ -74,7 +74,7 @@ If your X axis objects are not iterable and you're afraid that empty ones will b
 
 Integration with the tablizer gem provides quick ASCII tables.
 
-    puts percentages.tablize
+    puts Graphene.percentages(logs, :browser, :platform).tablize
     => +-----------------+------------+----------+
        |     Browser     |  Platform  |Percentage|
        +-----------------+------------+----------+
@@ -108,7 +108,7 @@ Provides helpers for generating Gruff graphs. Requires the "gruff" Ruby gem.
       end
     end
 
-See Graphene::OneDGraphs and Graphene::TwoDGraphs for more types and examples.
+See Graphene::OneDGraphs, Graphene::TwoDGraphs and http://jordanhollinger.com/2012/07/23/introducing-graphene for more graph types and examples.
 
 See http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/README_txt.html for more on Gruff.
 Specifically, http://www.ruby-doc.org/gems/docs/f/fhs-gruff-0.3.6.2/Gruff/Base.html will let 
