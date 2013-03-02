@@ -1,6 +1,6 @@
 module Graphene
   # Class for Graphene Exceptions
-  class GrapheneException < StandardError; end
+  GrapheneException = Class.new(StandardError)
 
   # For the given resources, returns the share of the count that each attr(s) has.
   # 
